@@ -40,10 +40,6 @@ async function run() {
     console.log(error);
   }
 
-  // owner = "mscwilson";
-  // repo = "try-out-actions-here";
-  // pullNumber = 97;
-  // issueNumber = 4;
   addCommentWithIssueNumber(octokit, owner, repo, pullNumber, issueNumber);
   const newTitle = await getIssueTitle(octokit, owner, repo, issueNumber);
   changePullTitle(octokit, owner, repo, pullNumber, newTitle);
@@ -87,9 +83,7 @@ async function getIssueTitle(octokit, owner, repo, issueNumber) {
     console.log(`Failed to find title for issue ${issueNumber}`);
     console.log(error);
   }
-  const newTitle = `${issueTitle} (close #${issueNumber})`;
-  console.log(`The PR title should be ${newTitle}`);
-  return newTitle;
+  return `${issueTitle} (close #${issueNumber})`;
 }
 
 async function changePullTitle(octokit, owner, repo, pullNumber, newTitle) {
