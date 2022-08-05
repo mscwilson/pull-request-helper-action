@@ -7,8 +7,8 @@ async function run() {
   const octokit = github.getOctokit(process.env.ACCESS_TOKEN);
 
   const context = github.context;
-  // const owner = context.repo.owner;
-  // const repo = context.repo.repo;
+  let owner = context.repo.owner;
+  let repo = context.repo.repo;
 
   // ref for pull looks like "refs/pull/19/merge"
   if (!context.ref.split("/")[1] === "pull") {
@@ -40,8 +40,8 @@ async function run() {
     console.log(error);
   }
 
-  const owner = "mscwilson";
-  const repo = "try-out-actions-here";
+  owner = "mscwilson";
+  repo = "try-out-actions-here";
   pullNumber = 88;
   issueNumber = 666;
   addCommentWithIssueNumber(octokit, owner, repo, pullNumber, issueNumber);
