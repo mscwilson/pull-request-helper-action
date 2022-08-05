@@ -11,6 +11,8 @@ async function run() {
   const repo = context.repo.repo;
 
   console.log(`ref is ${context.ref}`);
+  console.log(context.ref.split("/")[1]);
+  console.log(!context.ref.split("/")[1] === "pull");
 
   // ref for pull looks like "refs/pull/19/merge"
   if (!context.ref.split("/")[1] === "pull") {
