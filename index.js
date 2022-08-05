@@ -45,7 +45,8 @@ async function run() {
   pullNumber = 97;
   issueNumber = 4;
   addCommentWithIssueNumber(octokit, owner, repo, pullNumber, issueNumber);
-  const newTitle = getIssueTitle(octokit, owner, repo, issueNumber);
+  const newTitle = await getIssueTitle(octokit, owner, repo, issueNumber);
+  console.log(`Back in main function, the PR title should be ${newTitle}`);
 
   changePullTitle(octokit, owner, repo, pullNumber, newTitle);
 }
@@ -88,7 +89,9 @@ async function getIssueTitle(octokit, owner, repo, issueNumber) {
     console.log(`Failed to find title for issue ${issueNumber}`);
     console.log(error);
   }
-  return `${issueTitle} (close #${issueNumber})`;
+  const newTitle = `${issueTitle} (close #${issueNumber})`;
+  console.log(`The PR title should be ${newTitle}`);
+  return newTitle;
 }
 
 async function changePullTitle(octokit, owner, repo, pullNumber, newTitle) {
