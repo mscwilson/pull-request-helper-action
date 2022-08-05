@@ -7,8 +7,8 @@ async function run() {
   const octokit = github.getOctokit(process.env.ACCESS_TOKEN);
 
   const context = github.context;
-  let owner = context.repo.owner;
-  let repo = context.repo.repo;
+  const owner = context.repo.owner;
+  const repo = context.repo.repo;
 
   // ref for pull looks like "refs/pull/19/merge"
   if (!context.ref.split("/")[1] === "pull") {
@@ -16,7 +16,7 @@ async function run() {
     return;
   }
 
-  let pullNumber = context.ref.split("/")[2];
+  const pullNumber = context.ref.split("/")[2];
   let issueNumber;
 
   try {
@@ -29,20 +29,21 @@ async function run() {
     console.log(branchName);
 
     try {
+      // assumes the branch is called e.g. issue/123-some_text
       issueNumber = branchName.match(issueBranchRegex)[1];
       console.log(`issue # is ${issueNumber}`);
     } catch {
       console.log(`Couldn't find an issue number in "${branchName}"`);
       return;
     }
+
+    addCommentWithIssueNumber(octokit, owner, repo, pullNumber, issueNumber);
+    const newTitle = await getIssueTitle(octokit, owner, repo, issueNumber);
+    changePullTitle(octokit, owner, repo, pullNumber, newTitle);
   } catch (error) {
     console.log(`Failed to find PR ${pullNumber}`);
     console.log(error);
   }
-
-  addCommentWithIssueNumber(octokit, owner, repo, pullNumber, issueNumber);
-  const newTitle = await getIssueTitle(octokit, owner, repo, issueNumber);
-  changePullTitle(octokit, owner, repo, pullNumber, newTitle);
 }
 
 run();
