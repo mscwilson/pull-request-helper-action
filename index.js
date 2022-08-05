@@ -10,12 +10,8 @@ async function run() {
   const owner = context.repo.owner;
   const repo = context.repo.repo;
 
-  // console.log(`ref is ${context.ref}`);
-  // console.log(context.ref.split("/")[1]);
-  // console.log(!(context.ref.split("/")[1] === "pull"));
-
   // ref for pull looks like "refs/pull/19/merge"
-  if (!(context.ref.split("/")[1] === "pull")) {
+  if (context.ref.split("/")[1] !== "pull") {
     console.log("This isn't a pull request.");
     return;
   }
@@ -31,6 +27,12 @@ async function run() {
     });
     const branchName = pull.head.ref;
     console.log(branchName);
+
+    const baseBranch = pull.base.ref;
+    if (baseBranch.split("/")[0] !== "release") {
+      console.log("This is not a release branch.");
+      return;
+    }
 
     try {
       // assumes the branch is called e.g. issue/123-some_text
