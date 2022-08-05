@@ -10,12 +10,12 @@ async function run() {
   const owner = context.repo.owner;
   const repo = context.repo.repo;
 
-  console.log(`ref is ${context.ref}`);
-  console.log(context.ref.split("/")[1]);
-  console.log(!context.ref.split("/")[1] === "pull");
+  // console.log(`ref is ${context.ref}`);
+  // console.log(context.ref.split("/")[1]);
+  // console.log(!(context.ref.split("/")[1] === "pull"));
 
   // ref for pull looks like "refs/pull/19/merge"
-  if (!context.ref.split("/")[1] === "pull") {
+  if (!(context.ref.split("/")[1] === "pull")) {
     console.log("This isn't a pull request.");
     return;
   }
