@@ -17,6 +17,7 @@ async function run() {
   }
 
   let pullNumber = context.ref.split("/")[2];
+  let issueNumber;
 
   try {
     const { data: pull } = await octokit.rest.pulls.get({
@@ -27,7 +28,6 @@ async function run() {
     const branchName = pull.head.ref;
     console.log(branchName);
 
-    let issueNumber;
     try {
       issueNumber = branchName.match(issueBranchRegex)[1];
       console.log(`issue # is ${issueNumber}`);
@@ -40,14 +40,12 @@ async function run() {
     console.log(error);
   }
 
-  owner = "mscwilson";
-  repo = "try-out-actions-here";
-  pullNumber = 97;
-  issueNumber = 4;
+  // owner = "mscwilson";
+  // repo = "try-out-actions-here";
+  // pullNumber = 97;
+  // issueNumber = 4;
   addCommentWithIssueNumber(octokit, owner, repo, pullNumber, issueNumber);
   const newTitle = await getIssueTitle(octokit, owner, repo, issueNumber);
-  console.log(`Back in main function, the PR title should be ${newTitle}`);
-
   changePullTitle(octokit, owner, repo, pullNumber, newTitle);
 }
 
