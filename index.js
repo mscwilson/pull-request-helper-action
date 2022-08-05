@@ -30,12 +30,11 @@ async function run() {
     let issueNumber;
     try {
       issueNumber = branchName.match(issueBranchRegex)[1];
+      console.log(`issue # is ${issueNumber}`);
     } catch {
       console.log(`Couldn't find an issue number in "${branchName}"`);
       return;
     }
-
-    addLabelToIssue(octokit, owner, repo, issueNumber, "status:has_pr");
   } catch (error) {
     console.log(`Failed to find PR ${pullNumber}`);
     console.log(error);
