@@ -36,13 +36,15 @@ async function run() {
     }
 
     addLabelToIssue(octokit, owner, repo, issueNumber, "status:has_pr");
-  } catch {
+  } catch (error) {
     console.log(`Failed to find PR ${pullNumber}`);
+    console.log(error);
   }
 
   const owner = "mscwilson";
   const repo = "try-out-actions-here";
   pullNumber = 88;
+  issueNumber = 666;
   addCommentWithIssueNumber(octokit, owner, repo, pullNumber, issueNumber);
 }
 
@@ -63,7 +65,7 @@ async function addCommentWithIssueNumber(
       body: "a comment",
     });
   } catch (error) {
-    console.log(`Failed to add a comment to PR/issue ${issueNumber}`);
+    console.log(`Failed to add a comment to PR/issue ${pullNumber}`);
     console.log(error);
   }
 }
