@@ -16,7 +16,7 @@ async function run() {
     return;
   }
 
-  // const pullNumber = context.ref.split("/")[2];
+  let pullNumber = context.ref.split("/")[2];
 
   try {
     const { data: pull } = await octokit.rest.pulls.get({
@@ -42,7 +42,7 @@ async function run() {
 
   const owner = "mscwilson";
   const repo = "try-out-actions-here";
-  const pullNumber = 88;
+  pullNumber = 88;
   addCommentWithIssueNumber(octokit, owner, repo, pullNumber, issueNumber);
 }
 
