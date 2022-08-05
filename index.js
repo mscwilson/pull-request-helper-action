@@ -43,9 +43,11 @@ async function run() {
   owner = "mscwilson";
   repo = "try-out-actions-here";
   pullNumber = 97;
-  issueNumber = 5;
+  issueNumber = 4;
   addCommentWithIssueNumber(octokit, owner, repo, pullNumber, issueNumber);
-  getIssueTitle(octokit, owner, repo, issueNumber);
+  const newTitle = getIssueTitle(octokit, owner, repo, issueNumber);
+
+  changePullTitle(octokit, owner, repo, pullNumber, newTitle);
 }
 
 run();
@@ -73,18 +75,33 @@ async function addCommentWithIssueNumber(
 }
 
 async function getIssueTitle(octokit, owner, repo, issueNumber) {
+  let issueTitle;
   try {
     const { data: issue } = await octokit.rest.issues.get({
       owner: owner,
       repo: repo,
       issue_number: issueNumber,
     });
-    const issueTitle = issue.title;
+    issueTitle = issue.title;
     console.log(issueTitle);
   } catch (error) {
     console.log(`Failed to find title for issue ${issueNumber}`);
     console.log(error);
   }
+  return `${issueTitle} (close #${issueNumber})`;
 }
 
-async function changePullTitle(octokit, owner, repo, pullNumber) {}
+async function changePullTitle(octokit, owner, repo, pullNumber, newTitle) {
+  try {
+    octokit.rest.pulls.update({
+      owner: owner,
+      repo: repo,
+      pull_number: pullNumber,
+      title: newTitle,
+    });
+    console.log(`Updated the title for PR #${pullNumber}`);
+  } catch (error) {
+    console.log(`Failed to update title for PR ${pullNumber}`);
+    console.log(error);
+  }
+}
