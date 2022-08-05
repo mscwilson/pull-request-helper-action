@@ -42,9 +42,10 @@ async function run() {
 
   owner = "mscwilson";
   repo = "try-out-actions-here";
-  pullNumber = 88;
-  issueNumber = 666;
+  pullNumber = 97;
+  issueNumber = 5;
   addCommentWithIssueNumber(octokit, owner, repo, pullNumber, issueNumber);
+  getIssueTitle(octokit, owner, repo, issueNumber);
 }
 
 run();
@@ -57,14 +58,33 @@ async function addCommentWithIssueNumber(
   issueNumber
 ) {
   try {
+    // To comment generally on a PR, it's actually the issue comment API.
+    // Github considers pull comments to be for the actual code (review comments)
     octokit.rest.issues.createComment({
       owner: owner,
       repo: repo,
       issue_number: pullNumber,
-      body: "a comment",
+      body: `This pull request is for issue #${issueNumber}.`,
     });
   } catch (error) {
     console.log(`Failed to add a comment to PR/issue ${pullNumber}`);
     console.log(error);
   }
 }
+
+async function getIssueTitle(octokit, owner, repo, issueNumber) {
+  try {
+    const { data: issue } = await octokit.rest.issues.get({
+      owner: owner,
+      repo: repo,
+      issue_number: issueNumber,
+    });
+    const issueTitle = issue.title;
+    console.log(issueTitle);
+  } catch (error) {
+    console.log(`Failed to find title for issue ${issueNumber}`);
+    console.log(error);
+  }
+}
+
+async function changePullTitle(octokit, owner, repo, pullNumber) {}
